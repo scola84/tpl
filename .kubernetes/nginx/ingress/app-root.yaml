@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/enable-access-log: "false"
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+  name: app-root
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.mijnenergie.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: app-client
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - app.mijnenergie.io
+      secretName: letsencrypt-staging

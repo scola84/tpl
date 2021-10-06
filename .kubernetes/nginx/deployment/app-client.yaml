@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: app-client
+  template:
+    metadata:
+      labels:
+        name: app-client
+    spec:
+      containers:
+        - image: nginx
+          name: app-client
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx
+              readOnly: true
+              subPath: nginx.conf
+      volumes:
+        - configMap:
+            name: nginx
+          name: nginx

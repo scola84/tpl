@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: app-server
+  template:
+    metadata:
+      labels:
+        name: app-server
+    spec:
+      containers:
+        - args: ["/usr/src/app/node.js"]
+          command: ["node"]
+          image: node:16
+          name: app-server
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /usr/src/app/node.js
+              name: node
+              readOnly: true
+              subPath: node.js
+      volumes:
+        - configMap:
+            name: node
+          name: node
